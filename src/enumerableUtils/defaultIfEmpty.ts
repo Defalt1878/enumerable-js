@@ -5,7 +5,7 @@ export const defaultIfEmpty = <T, TDefault extends T | undefined = undefined>(
   defaultValue?: TDefault,
 ) => {
   if (!isArray(source)) {
-    return defaultIfEmptyIterable(source, defaultValue)
+    return defaultIfEmptyIterator(source, defaultValue)
   }
 
   if (source.length > 0) {
@@ -14,7 +14,7 @@ export const defaultIfEmpty = <T, TDefault extends T | undefined = undefined>(
   return [defaultValue as TDefault]
 }
 
-export function* defaultIfEmptyIterable<T, TDefault extends T | undefined = undefined>(
+export function* defaultIfEmptyIterator<T, TDefault extends T | undefined = undefined>(
   source: Iterable<T>,
   defaultValue?: TDefault,
 ) {
