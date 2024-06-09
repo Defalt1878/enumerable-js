@@ -6,33 +6,64 @@ import { minBy } from './enumerableUtils/min.ts'
 import { select } from './enumerableUtils/select.ts'
 import { where, whereNotNull } from './enumerableUtils/where.ts'
 
-export interface Enumerable<out T> {
-  [Symbol.iterator]: () => Iterator<T>
-
+export interface IEnumerable<out T> extends Iterable<T> {
   toArray: () => T[]
   firstOrDefault: (filter?: (element: T) => boolean) => T | undefined
   lastOrDefault: () => T | undefined
   minBy: <TKey>(selector: (element: T) => TKey) => T | undefined
 
-  defaultIfEmpty: <TDefault extends T | undefined = undefined>(defaultValue?: TDefault) => Enumerable<T | TDefault>
+  defaultIfEmpty: <TDefault extends T | undefined = undefined>(defaultValue?: TDefault) => IEnumerable<T | TDefault>
 
-  where: (filter: (element: T) => boolean) => Enumerable<T>
-  select: <TResult>(selector: (element: T) => TResult) => Enumerable<TResult>
-  whereNotNull: () => Enumerable<Exclude<T, null | undefined>>
+  where: (filter: (element: T) => boolean) => IEnumerable<T>
+  select: <TResult>(selector: (element: T) => TResult) => IEnumerable<TResult>
+  whereNotNull: () => IEnumerable<NonNullable<T>>
 }
 
-export const Enumerable = <T>(source: Iterable<T>): Enumerable<T> => ({
-  [Symbol.iterator]: () => source[Symbol.iterator](),
+export class Enumerable<out T> implements IEnumerable<T> {
+  protected source: Iterable<T>
 
-  toArray: () => toArray(source),
-  firstOrDefault: (filter?: (element: T) => boolean) => firstOrDefault(source, filter),
-  lastOrDefault: () => lastOrDefault(source),
-  minBy: <TKey>(selector: (element: T) => TKey) => minBy(source, selector),
+  private constructor(source: Iterable<T>) {
+    this.source = source
+  }
 
-  defaultIfEmpty: <TDefault extends T | undefined = undefined>(defaultValue?: TDefault) =>
-    Enumerable(defaultIfEmpty(source, defaultValue)),
+  public static from<T>(iterable: Iterable<T>): IEnumerable<T> {
+    return new Enumerable(iterable)
+  }
 
-  where: (filter: (element: T) => boolean) => Enumerable(where(source, filter)),
-  select: <TResult>(selector: (element: T) => TResult) => Enumerable(select(source, selector)),
-  whereNotNull: () => Enumerable(whereNotNull(source)),
-})
+  public toArray() {
+    return toArray(this.source)
+  }
+
+  public firstOrDefault(filter?: (element: T) => boolean) {
+    return firstOrDefault(this.source, filter)
+  }
+
+  public lastOrDefault() {
+    return lastOrDefault(this.source)
+  }
+
+  public minBy<TKey>(selector: (element: T) => TKey) {
+    return minBy(this.source, selector)
+  }
+
+  public defaultIfEmpty<TDefault extends T | undefined = undefined>(defaultValue?: TDefault) {
+    return Enumerable.from(defaultIfEmpty(this.source, defaultValue))
+  }
+
+  public where(filter: (element: T) => boolean) {
+    return Enumerable.from(where(this.source, filter))
+  }
+
+  public select<TResult>(selector: (element: T) => TResult) {
+    return Enumerable.from(select(this.source, selector))
+  }
+
+  public whereNotNull() {
+    return Enumerable.from(whereNotNull(this.source))
+  }
+
+  [Symbol.iterator]() {
+    return this.source[Symbol.iterator]()
+  }
+}
+
