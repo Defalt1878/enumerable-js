@@ -1,5 +1,6 @@
 import { toArray } from './enumerableUtils/collections.ts'
 import { defaultIfEmpty } from './enumerableUtils/defaultIfEmpty.ts'
+import { distinct, distinctBy } from './enumerableUtils/distinct.ts'
 import { firstOrDefault } from './enumerableUtils/first.ts'
 import { lastOrDefault } from './enumerableUtils/last.ts'
 import { minBy } from './enumerableUtils/min.ts'
@@ -17,6 +18,9 @@ export interface IEnumerable<out T> extends Iterable<T> {
   where: (filter: (element: T) => boolean) => IEnumerable<T>
   select: <TResult>(selector: (element: T) => TResult) => IEnumerable<TResult>
   whereNotNull: () => IEnumerable<NonNullable<T>>
+
+  distinct: () => IEnumerable<T>
+  distinctBy: <TKey>(keySelector: (element: T) => TKey) => IEnumerable<T>
 }
 
 export class Enumerable<out T> implements IEnumerable<T> {
@@ -60,6 +64,14 @@ export class Enumerable<out T> implements IEnumerable<T> {
 
   public whereNotNull() {
     return Enumerable.from(whereNotNull(this.source))
+  }
+
+  distinct(): IEnumerable<T> {
+    return Enumerable.from(distinct(this.source))
+  }
+
+  distinctBy<TKey>(keySelector: (element: T) => TKey): IEnumerable<T> {
+    return Enumerable.from(distinctBy(this.source, keySelector))
   }
 
   [Symbol.iterator]() {
