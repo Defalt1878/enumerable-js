@@ -1,5 +1,7 @@
+import { isEmptyArray } from '../utils/isArray.ts'
+
 export function minBy<T, TKey>(source: Iterable<T>, selector: (element: T) => TKey) {
-  if (Array.isArray(source) && source.length === 0) {
+  if (isEmptyArray(source)) {
     return undefined
   }
 
