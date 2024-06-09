@@ -7,4 +7,4 @@ export function* where<T>(source: Iterable<T>, filter: (element: T) => boolean) 
 }
 
 export const whereNotNull = <T>(source: Iterable<T>) =>
-  where(source, e => e != null) as Iterable<Exclude<T, null | undefined>>
+  where(source, e => e != null) as Iterable<NonNullable<T>>
