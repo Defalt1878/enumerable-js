@@ -1,4 +1,5 @@
 import { toArray } from './enumerableUtils/collections.ts'
+import { count } from './enumerableUtils/count.ts'
 import { defaultIfEmpty } from './enumerableUtils/defaultIfEmpty.ts'
 import { distinct, distinctBy } from './enumerableUtils/distinct.ts'
 import { firstOrDefault } from './enumerableUtils/first.ts'
@@ -12,6 +13,7 @@ export interface IEnumerable<out T> extends Iterable<T> {
   firstOrDefault: (filter?: (element: T) => boolean) => T | undefined
   lastOrDefault: () => T | undefined
   minBy: <TKey>(selector: (element: T) => TKey) => T | undefined
+  count: (filter?: (element: T) => boolean) => number
 
   defaultIfEmpty: <TDefault extends T | undefined = undefined>(defaultValue?: TDefault) => IEnumerable<T | TDefault>
 
@@ -48,6 +50,10 @@ export class Enumerable<out T> implements IEnumerable<T> {
 
   public minBy<TKey>(selector: (element: T) => TKey) {
     return minBy(this.source, selector)
+  }
+
+  public count(filter?: (element: T) => boolean) {
+    return count(this.source, filter)
   }
 
   public defaultIfEmpty<TDefault extends T | undefined = undefined>(defaultValue?: TDefault) {
