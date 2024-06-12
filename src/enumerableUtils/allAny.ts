@@ -1,5 +1,5 @@
 import { Predicate } from '../types.ts'
-import { isEmptyArray } from '../utils/isArray.ts'
+import { isArray, isEmptyArray } from '../utils/isArray.ts'
 
 export const all = <T>(source: Iterable<T>, predicate: Predicate<T>) => {
   if (isEmptyArray(source)) {
@@ -15,8 +15,13 @@ export const all = <T>(source: Iterable<T>, predicate: Predicate<T>) => {
 }
 
 export const any = <T>(source: Iterable<T>, predicate?: Predicate<T>) => {
-  if (isEmptyArray(source)) {
-    return false
+  if (isArray(source)) {
+    if (source.length === 0) {
+      return false
+    }
+    if (!predicate) {
+      return true
+    }
   }
 
   if (!predicate) {
