@@ -3,9 +3,13 @@ import { expectIterable } from '../../src/utils/testUtils.ts'
 
 describe('distinct', () => {
   describe('distinct', () => {
-    test('Should return empty array, if source is empty', () => {
+    test('Should return empty, if source is empty array', () => {
       const source = [] as never[]
       expect(distinct(source)).toEqual(source)
+    })
+    test('Should return empty, if source is empty iterable', () => {
+      const source = [] as never[]
+      expectIterable(distinct(source.values())).toEqual(source)
     })
     test('Should return same array, if no duplicates', () => {
       const source = [1, 2, 3]
@@ -26,9 +30,13 @@ describe('distinct', () => {
     }
     const selector = (e: { value: number }) => e.value
 
-    test('Should return empty array, if source is empty', () => {
+    test('Should return empty, if source is empty array', () => {
       const source = createObjArray([] as never[])
       expect(distinctBy(source, selector)).toEqual(source)
+    })
+    test('Should return empty, if source is empty iterable', () => {
+      const source = createObjArray([] as never[])
+      expectIterable(distinctBy(source.values(), selector)).toEqual(source)
     })
     test('Should return same array, if no duplicates', () => {
       const source = createObjArray([1, 2, 3])

@@ -19,10 +19,20 @@ describe('sort', () => {
     const stages: SortStage<number>[] = [{ order: SortOrder.Ascending, keySelector: e => e }]
     expectIterable(sort(source, stages)).toEqual([1, 2, 3])
   })
+  test('Should sort array in ascending order, if has same elements in array', () => {
+    const source = [3, 1, 2, 1]
+    const stages: SortStage<number>[] = [{ order: SortOrder.Ascending, keySelector: e => e }]
+    expectIterable(sort(source, stages)).toEqual([1, 1, 2, 3])
+  })
   test('Should sort array in descending order, if one descending stage passed', () => {
     const source = [3, 1, 2]
     const stages: SortStage<number>[] = [{ order: SortOrder.Descending, keySelector: e => e }]
     expectIterable(sort(source, stages)).toEqual([3, 2, 1])
+  })
+  test('Should sort array in descending order, if has same elements in array', () => {
+    const source = [3, 1, 2, 1]
+    const stages: SortStage<number>[] = [{ order: SortOrder.Descending, keySelector: e => e }]
+    expectIterable(sort(source, stages)).toEqual([3, 2, 1, 1])
   })
   test('Should correct sort, if multiple stages in ascending order passed', () => {
     const source = [
