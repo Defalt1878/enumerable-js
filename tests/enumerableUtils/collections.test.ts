@@ -1,5 +1,5 @@
 import { toArray } from '../../src/enumerableUtils/collections.ts'
-import { assertNoIteratorCall, enrichWithIteratorMock } from '../../src/utils/testUtils.ts'
+import { assertNoIteratorCall, enrichWithIteratorMock } from '../testUtils.ts'
 
 describe('collections', () => {
   describe('toArray', () => {

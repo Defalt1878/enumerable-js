@@ -1,4 +1,4 @@
-import { expectIterable } from '../../src/utils/testUtils.ts'
+import { expectIterable } from '../testUtils.ts'
 import { select } from '../../src/enumerableUtils/select.ts'
 
 describe('select', () => {

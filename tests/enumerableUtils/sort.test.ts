@@ -1,18 +1,18 @@
 import { sort } from '../../src/enumerableUtils/sort.ts'
 import { SortOrder, SortStage } from '../../src/types.ts'
-import { enrichWithIteratorMock, expectIterable } from '../../src/utils/testUtils.ts'
+import { assertNoIteratorCall, enrichWithIteratorMock, expectIterable } from '../testUtils.ts'
 
 describe('sort', () => {
   test('Should return same array without calling iterator, if stages is empty', () => {
     const source = enrichWithIteratorMock([2, 1, 3])
     expect(sort(source, [])).toEqual(source)
-    expect(source[Symbol.iterator]).not.toHaveBeenCalled()
+    assertNoIteratorCall(source)
   })
   test('Should return same array without calling iterator, if array is empty', () => {
     const source = enrichWithIteratorMock([])
     const stages: SortStage<number>[] = [{ order: SortOrder.Ascending, keySelector: e => e }]
     expect(sort(source, stages)).toEqual(source)
-    expect(source[Symbol.iterator]).not.toHaveBeenCalled()
+    assertNoIteratorCall(source)
   })
   test('Should sort array in ascending order, if one ascending stage passed', () => {
     const source = [3, 1, 2]

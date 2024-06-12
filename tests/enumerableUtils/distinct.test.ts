@@ -1,5 +1,5 @@
 import { distinct, distinctBy } from '../../src/enumerableUtils/distinct.ts'
-import { expectIterable } from '../../src/utils/testUtils.ts'
+import { expectIterable } from '../testUtils.ts'
 
 describe('distinct', () => {
   describe('distinct', () => {

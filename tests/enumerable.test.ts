@@ -1,5 +1,5 @@
 import { Enumerable } from '../src'
-import { enrichWithIteratorMock } from '../src/utils/testUtils.ts'
+import { assertNoIteratorCall, enrichWithIteratorMock } from './testUtils.ts'
 
 describe('Enumerable', () => {
 
@@ -13,7 +13,7 @@ describe('Enumerable', () => {
     const source = enrichWithIteratorMock([2, 1, 3])
     const enumerable = Enumerable.from(source)
     expect(enumerable.toArray()).toEqual(source)
-    expect(source[Symbol.iterator]).not.toHaveBeenCalled()
+    assertNoIteratorCall(source)
   })
 
   test('toArray should return sorted array, if order was called', () => {

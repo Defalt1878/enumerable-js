@@ -1,12 +1,12 @@
 import { firstOrDefault } from '../../src/enumerableUtils/first.ts'
-import { enrichWithIteratorMock } from '../../src/utils/testUtils.ts'
+import { assertNoIteratorCall, enrichWithIteratorMock } from '../testUtils.ts'
 
 describe('first', () => {
   describe('firstOrDefault', () => {
     test('Should return first element without calling iterator, if source is array', () => {
       const source = enrichWithIteratorMock([1, 2, 3])
       expect(firstOrDefault(source)).toBe(source[0])
-      expect(source[Symbol.iterator]).not.toHaveBeenCalled()
+      assertNoIteratorCall(source)
     })
     test('Should return first element, if source is not array', () => {
       const source = [1, 2, 3]

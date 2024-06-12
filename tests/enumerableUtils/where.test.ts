@@ -1,4 +1,4 @@
-import { expectIterable } from '../../src/utils/testUtils.ts'
+import { expectIterable } from '../testUtils.ts'
 import { where, whereNotNull } from '../../src/enumerableUtils/where.ts'
 
 describe('where', () => {

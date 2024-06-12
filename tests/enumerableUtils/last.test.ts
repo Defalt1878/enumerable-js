@@ -1,17 +1,17 @@
 import { lastOrDefault } from '../../src/enumerableUtils/last.ts'
-import { enrichWithIteratorMock } from '../../src/utils/testUtils.ts'
+import { assertNoIteratorCall, enrichWithIteratorMock } from '../testUtils.ts'
 
 describe('last', () => {
   describe('lastOrDefault', () => {
     test('Should return first element without calling iterator, if source is array', () => {
       const source = enrichWithIteratorMock([1, 2, 3])
       expect(lastOrDefault(source)).toBe(source[2])
-      expect(source[Symbol.iterator]).not.toHaveBeenCalled()
+      assertNoIteratorCall(source)
     })
     test('Should return undefined element without calling iterator, if source is empty iterable', () => {
       const source = enrichWithIteratorMock([])
       expect(lastOrDefault(source)).toBeUndefined()
-      expect(source[Symbol.iterator]).not.toHaveBeenCalled()
+      assertNoIteratorCall(source)
     })
     test('Should return first element, if source is not array', () => {
       const source = [1, 2, 3]
