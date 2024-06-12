@@ -1,7 +1,12 @@
+import { all, any } from './enumerableUtils/allAny.ts'
+import { average } from './enumerableUtils/average.ts'
 import { toArray } from './enumerableUtils/collections.ts'
+import { contains } from './enumerableUtils/contains.ts'
 import { count } from './enumerableUtils/count.ts'
 import { defaultIfEmpty } from './enumerableUtils/defaultIfEmpty.ts'
 import { distinct, distinctBy } from './enumerableUtils/distinct.ts'
+import { elementAtOrDefault } from './enumerableUtils/elementAt.ts'
+import { empty } from './enumerableUtils/empty.ts'
 import { firstOrDefault } from './enumerableUtils/first.ts'
 import { lastOrDefault } from './enumerableUtils/last.ts'
 import { minBy } from './enumerableUtils/min.ts'
@@ -20,6 +25,10 @@ export class Enumerable<T> implements IEnumerable<T> {
 
   public static from<T>(iterable: Iterable<T>) {
     return new Enumerable(iterable)
+  }
+
+  public static empty<T>() {
+    return new Enumerable<T>(empty())
   }
 
   protected get iterable(): Iterable<T> {
@@ -44,6 +53,26 @@ export class Enumerable<T> implements IEnumerable<T> {
 
   public count(filter?: Predicate<T>) {
     return count(this.iterable, filter)
+  }
+
+  public all(predicate: Predicate<T>) {
+    return all(this.iterable, predicate)
+  }
+
+  public any(predicate?: Predicate<T>) {
+    return any(this.iterable, predicate)
+  }
+
+  public average(selector: Selector<T, number>) {
+    return average(this.iterable, selector)
+  }
+
+  public contains(element: T) {
+    return contains(this.iterable, element)
+  }
+
+  public elementAtOrDefault(index: number) {
+    return elementAtOrDefault(this.iterable, index)
   }
 
   public defaultIfEmpty<TDefault extends T | undefined = undefined>(defaultValue?: TDefault) {

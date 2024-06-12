@@ -1,11 +1,16 @@
 import { Predicate, Selector } from './types.ts'
 
-export interface IEnumerable<out T> extends Iterable<T> {
+export interface IEnumerable<T> extends Iterable<T> {
   toArray: () => T[]
   firstOrDefault: (filter?: Predicate<T>) => T | undefined
   lastOrDefault: () => T | undefined
   minBy: <TKey>(selector: Selector<T, TKey>) => T | undefined
   count: (filter?: Predicate<T>) => number
+  all: (predicate: Predicate<T>) => boolean
+  any: (predicate?: Predicate<T>) => boolean
+  average: (selector: Selector<T, number>) => number | undefined
+  contains: (element: T) => boolean
+  elementAtOrDefault: (index: number) => T | undefined
 
   defaultIfEmpty: <TDefault extends T | undefined = undefined>(defaultValue?: TDefault) => IEnumerable<T | TDefault>
 
@@ -22,7 +27,7 @@ export interface IEnumerable<out T> extends Iterable<T> {
   orderByDescending: <TKey>(keySelector: Selector<T, TKey>) => IOrderedEnumerable<T>
 }
 
-export interface IOrderedEnumerable<out T> extends IEnumerable<T> {
+export interface IOrderedEnumerable<T> extends IEnumerable<T> {
   thenBy: <TKey>(keySelector: Selector<T, TKey>) => IOrderedEnumerable<T>
   thenByDescending: <TKey>(selector: Selector<T, TKey>) => IOrderedEnumerable<T>
 }
