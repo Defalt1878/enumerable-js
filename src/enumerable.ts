@@ -9,7 +9,7 @@ import { select } from './enumerableUtils/select.ts'
 import { where, whereNotNull } from './enumerableUtils/where.ts'
 import { IEnumerable } from './interfaces.ts'
 import { OrderedEnumerable } from './orderedEnumerable.ts'
-import { Filter, Selector, SortOrder } from './types.ts'
+import { Predicate, Selector, SortOrder } from './types.ts'
 
 export class Enumerable<T> implements IEnumerable<T> {
   protected source: Iterable<T>
@@ -30,7 +30,7 @@ export class Enumerable<T> implements IEnumerable<T> {
     return toArray(this.iterable)
   }
 
-  public firstOrDefault(filter?: Filter<T>) {
+  public firstOrDefault(filter?: Predicate<T>) {
     return firstOrDefault(this.iterable, filter)
   }
 
@@ -42,7 +42,7 @@ export class Enumerable<T> implements IEnumerable<T> {
     return minBy(this.iterable, selector)
   }
 
-  public count(filter?: Filter<T>) {
+  public count(filter?: Predicate<T>) {
     return count(this.iterable, filter)
   }
 
@@ -50,7 +50,7 @@ export class Enumerable<T> implements IEnumerable<T> {
     return Enumerable.from(defaultIfEmpty(this.iterable, defaultValue))
   }
 
-  public where(filter: Filter<T>) {
+  public where(filter: Predicate<T>) {
     return Enumerable.from(where(this.iterable, filter))
   }
 

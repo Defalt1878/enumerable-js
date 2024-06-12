@@ -1,15 +1,15 @@
-import { Filter, Selector } from './types.ts'
+import { Predicate, Selector } from './types.ts'
 
 export interface IEnumerable<out T> extends Iterable<T> {
   toArray: () => T[]
-  firstOrDefault: (filter?: Filter<T>) => T | undefined
+  firstOrDefault: (filter?: Predicate<T>) => T | undefined
   lastOrDefault: () => T | undefined
   minBy: <TKey>(selector: Selector<T, TKey>) => T | undefined
-  count: (filter?: Filter<T>) => number
+  count: (filter?: Predicate<T>) => number
 
   defaultIfEmpty: <TDefault extends T | undefined = undefined>(defaultValue?: TDefault) => IEnumerable<T | TDefault>
 
-  where: (filter: Filter<T>) => IEnumerable<T>
+  where: (filter: Predicate<T>) => IEnumerable<T>
   select: <TResult>(selector: Selector<T, TResult>) => IEnumerable<TResult>
   whereNotNull: () => IEnumerable<NonNullable<T>>
 

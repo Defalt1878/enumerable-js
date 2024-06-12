@@ -1,8 +1,8 @@
-import { Filter } from '../types.ts'
+import { Predicate } from '../types.ts'
 import { isArray } from '../utils/isArray.ts'
 import { where } from './where.ts'
 
-export const count = <T>(source: Iterable<T>, filter?: Filter<T>) => {
+export const count = <T>(source: Iterable<T>, filter?: Predicate<T>) => {
   if (isArray(source) && !filter) {
     return source.length
   }
