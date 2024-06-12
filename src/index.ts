@@ -1,1 +1,5 @@
-export { Enumerable, Enumerable as default, type IEnumerable } from './enumerable.ts'
+// First import OrderedEnumerable to initialize Enumerable module and resolve circular class dependency
+import './orderedEnumerable.ts'
+
+export { Enumerable, Enumerable as default } from './enumerable.ts'
+export type { IEnumerable, IOrderedEnumerable } from './interfaces.ts'
