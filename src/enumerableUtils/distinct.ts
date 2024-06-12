@@ -1,3 +1,4 @@
+import { Selector } from '../types.ts'
 import { isEmptyArray } from '../utils/isArray.ts'
 
 export const distinct = <T>(source: Iterable<T>) => {
@@ -8,7 +9,7 @@ export const distinct = <T>(source: Iterable<T>) => {
   return distinctIterator(source)
 }
 
-export const distinctBy = <T, TKey>(source: Iterable<T>, keySelector: (element: T) => TKey) => {
+export const distinctBy = <T, TKey>(source: Iterable<T>, keySelector: Selector<T, TKey>) => {
   if (isEmptyArray(source)) {
     return source
   }

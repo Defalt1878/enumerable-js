@@ -7,28 +7,29 @@ import { lastOrDefault } from './enumerableUtils/last.ts'
 import { minBy } from './enumerableUtils/min.ts'
 import { select } from './enumerableUtils/select.ts'
 import { where, whereNotNull } from './enumerableUtils/where.ts'
+import { Filter, Selector } from './types.ts'
 
 export interface IEnumerable<out T> extends Iterable<T> {
   toArray: () => T[]
-  firstOrDefault: (filter?: (element: T) => boolean) => T | undefined
+  firstOrDefault: (filter?: Filter<T>) => T | undefined
   lastOrDefault: () => T | undefined
-  minBy: <TKey>(selector: (element: T) => TKey) => T | undefined
-  count: (filter?: (element: T) => boolean) => number
+  minBy: <TKey>(selector: Selector<T, TKey>) => T | undefined
+  count: (filter?: Filter<T>) => number
 
   defaultIfEmpty: <TDefault extends T | undefined = undefined>(defaultValue?: TDefault) => IEnumerable<T | TDefault>
 
-  where: (filter: (element: T) => boolean) => IEnumerable<T>
-  select: <TResult>(selector: (element: T) => TResult) => IEnumerable<TResult>
+  where: (filter: Filter<T>) => IEnumerable<T>
+  select: <TResult>(selector: Selector<T, TResult>) => IEnumerable<TResult>
   whereNotNull: () => IEnumerable<NonNullable<T>>
 
   distinct: () => IEnumerable<T>
-  distinctBy: <TKey>(keySelector: (element: T) => TKey) => IEnumerable<T>
+  distinctBy: <TKey>(keySelector: Selector<T, TKey>) => IEnumerable<T>
 }
 
 export class Enumerable<out T> implements IEnumerable<T> {
   protected source: Iterable<T>
 
-  private constructor(source: Iterable<T>) {
+  protected constructor(source: Iterable<T>) {
     this.source = source
   }
 
@@ -40,7 +41,7 @@ export class Enumerable<out T> implements IEnumerable<T> {
     return toArray(this.source)
   }
 
-  public firstOrDefault(filter?: (element: T) => boolean) {
+  public firstOrDefault(filter?: Filter<T>) {
     return firstOrDefault(this.source, filter)
   }
 
@@ -48,11 +49,11 @@ export class Enumerable<out T> implements IEnumerable<T> {
     return lastOrDefault(this.source)
   }
 
-  public minBy<TKey>(selector: (element: T) => TKey) {
+  public minBy<TKey>(selector: Selector<T, TKey>) {
     return minBy(this.source, selector)
   }
 
-  public count(filter?: (element: T) => boolean) {
+  public count(filter?: Filter<T>) {
     return count(this.source, filter)
   }
 
@@ -60,11 +61,11 @@ export class Enumerable<out T> implements IEnumerable<T> {
     return Enumerable.from(defaultIfEmpty(this.source, defaultValue))
   }
 
-  public where(filter: (element: T) => boolean) {
+  public where(filter: Filter<T>) {
     return Enumerable.from(where(this.source, filter))
   }
 
-  public select<TResult>(selector: (element: T) => TResult) {
+  public select<TResult>(selector: Selector<T, TResult>) {
     return Enumerable.from(select(this.source, selector))
   }
 
@@ -76,7 +77,7 @@ export class Enumerable<out T> implements IEnumerable<T> {
     return Enumerable.from(distinct(this.source))
   }
 
-  distinctBy<TKey>(keySelector: (element: T) => TKey): IEnumerable<T> {
+  distinctBy<TKey>(keySelector: Selector<T, TKey>): IEnumerable<T> {
     return Enumerable.from(distinctBy(this.source, keySelector))
   }
 

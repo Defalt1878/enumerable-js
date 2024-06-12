@@ -1,6 +1,7 @@
+import { Filter } from '../types.ts'
 import { isEmptyArray } from '../utils/isArray.ts'
 
-export function* where<T>(source: Iterable<T>, filter: (element: T) => boolean) {
+export function* where<T>(source: Iterable<T>, filter: Filter<T>) {
   if (isEmptyArray(source)) {
     return source
   }

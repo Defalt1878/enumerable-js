@@ -1,6 +1,7 @@
+import { Selector } from '../types.ts'
 import { isEmptyArray } from '../utils/isArray.ts'
 
-export function minBy<T, TKey>(source: Iterable<T>, selector: (element: T) => TKey) {
+export function minBy<T, TKey>(source: Iterable<T>, selector: Selector<T, TKey>) {
   if (isEmptyArray(source)) {
     return undefined
   }
